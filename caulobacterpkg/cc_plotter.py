@@ -34,7 +34,6 @@ def plotter_bokeh(df, width, bacterium):
     p.output_backend = 'svg'
     return p
     
-
     
 def plotter_datashade(df, width, bacterium):
     '''plots frames and areas of bacteria'''
