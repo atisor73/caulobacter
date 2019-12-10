@@ -3,6 +3,7 @@
 from .img_visualization import *
 from .img_processing import *
 from .cc_plotter import *
+from .modeling import *
 
 __author__ = 'Rosita Fu'
 __email__ = 'rfu@caltech.edu'
