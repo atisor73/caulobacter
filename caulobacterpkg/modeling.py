@@ -15,9 +15,6 @@ bebi103.hv.set_defaults()
 bokeh.io.output_notebook()
 
 
-
-
-
 def growth_data(df):
     '''takes in dataframe with colored cycles, 
     returns data frame of min and max areas, length of cycle, frame of reference'''
@@ -141,3 +138,25 @@ def return_a_theoretical(df, b_k_MLEs, b_a0_MLEs, func="exp"):
                                  "times": times+df.loc[df["colored"]==cycle]["frame"].min(), 
                                  "theoretical_a":theoretical_a}))
     return pd.concat(dfs, ignore_index=True)
+
+
+# ecdf bokeh
+def plotter_bokeh(df, width, bacterium):
+    '''plots frames and areas of bacteria'''
+    x, y = "frame", "areas (μm^2)"
+    color = df["colored"]
+    
+    p = bokeh.plotting.figure(width=width, height=300, 
+        x_axis_label=x, y_axis_label=y,
+        tooltips=[(x, "@{frame}"), (y, "@{areas (μm^2)}"), ("cycle", "@{colored}")],
+        title=f"{bacterium}")
+    
+    # alternates colors for even / odd cycles
+    p.circle(source=df.loc[color % 2 == 0], x=x, y=y, color="darkblue")
+    p.circle(source=df.loc[color % 2 == 1], x=x, y=y, color="lightblue")
+
+    p.xgrid.grid_line_color, p.ygrid.grid_line_color = None, None
+    p.outline_line_color = None
+    p.title.align, p.title.text_font_style = "center", "bold"
+    p.toolbar.autohide = True
+    return p
