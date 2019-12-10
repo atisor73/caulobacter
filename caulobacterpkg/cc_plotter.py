@@ -1,8 +1,11 @@
 import bokeh
+import bebi103
+import bokeh_catplot
 import colorcet
 import holoviews as hv
 import holoviews.operation.datashader
 from holoviews.operation.datashader import dynspread
+bokeh.io.output_notebook()
 
 hv.extension('bokeh')
 
@@ -60,3 +63,11 @@ def plotter_datashade(df, width, bacterium):
         title=bacterium
     )
     return dynspread(p)
+
+
+def ecdf_plotter(data, title, xrange=None):
+    p = bokeh_catplot.ecdf(data=data, cats=None, val="times", 
+                            style='formal', palette=['#8c564b'], 
+                           x_range=xrange, title=title)
+
+    return p
