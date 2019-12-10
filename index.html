@@ -20,10 +20,9 @@
     }
 
 </style>
-    
+
   <title>
       Cauliflower Research | RF, TM, ES
-
   </title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,7 +39,7 @@
   <script type="text/javascript" async
     src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
-
+  
 
   <!-- Google Analytics -->
   <script>
@@ -53,7 +52,6 @@
   ga('send', 'pageview');
 </script>
 
-    
 <!-- Use Jekyll SEO plugin -->
 <!-- Begin Jekyll SEO tag v2.5.0 -->
     <meta name="generator" content="Jekyll v3.8.5" />
@@ -95,10 +93,6 @@
       <div class="author-name"></div>
       <div class="sidebar-links">
       <hr>
-      
-  <footer>
-
-  </footer>
 </aside>
 
 <!--<div class="content-box clearfix">-->
@@ -124,6 +118,7 @@
 <p> <a href="http://github.com/atisor73" target="_blank"><i class="fa fa-github"></i></a></ul> Rosita Fu, Theresa Marlin, Erika Salzman </p>
 
 <h2 id="abstract">Abstract</h2>
+<hr style="margin-left: auto; margin-right: auto; width: 100%; color: #f2f2f2" />
 <p><strong> Division of an entire bacterial colony is the canonical example of exponential growth. However, the rate of growth of an individual bacterium is less obvious; complex cellular dynamics within the replication machinery and cytoskeletal reactions can change the density of the cell during division, and there could be multiple positive and negative feedback dependencies on the current size that act to promote or constrict growth. Here, two parent <em>Caulobacter Crescentus</em> cells undergoing division were studied, the data provided by <a href="http://schererlab.uchicago.edu/">Norbert Scherer's Lab</a> @ the University of Chicago. Ultimately, we observe a discernible pattern of exponential growth between divisions. We will discuss the specific image processing techniques used to extract the relevant data from these images, as well as the modeling methods used to reach our conclusion of exponential growth.</strong></p>
     
 <h3 id="experimental methods">Experimental Methods</h3>
@@ -131,9 +126,10 @@
 
 <img src="lotsa_cauliflower.png" >
 <center>Figure 1: Experimental setup. A field of <em>C. Crescentus</em> </center>
-<hr style="margin-left: auto; margin-right: auto; width: 60%; color: #f2f2f2" />
 
 <h2 id="img processing">Image Processing</h2>
+<hr style="margin-left: auto; margin-right: auto; width: 100%; color: #f2f2f2" />
+
 <!--      MOVIES-->
 <p> <strong>The modules in python's <code>skimage</code> helped us convert our images to a binary file, where pixels were either marked as part of the bacterium or not. To do this, a sobel filter was applied to help us define a threshold to assist us in segmentation. The source code is provided below, as well as a discussion of why we selected particular values and variables to help us in the conversion process.</strong></p>
 
@@ -144,14 +140,16 @@
         <center>Figure 2a: Screen-recording of pre-filtered frames of bacterium 1.</center>
         <center>Frame rate: 1 frame/minute, interpixel spacing of 0.052 µm, images acquired at 24∘C</center>
         
-
-    <h2 id="Segmentation">Segmentation Methodology</h2>
     <p> Since noise can cause one pixel to look very different from its neighbors, the <a href="https://en.wikipedia.org/wiki/Marr%E2%80%93Hildreth_algorithm">Marr Hildreth algorithm</a> was used to apply a Sobel filter, utilizing a nice computation technique taking the log of the gaussian, operating under the principle that pixels along an edge share similar values.
     </p>
     
     <img src="marr_hildreth_1.gif" style="width:90%">
         <center>Figure 2b: Screen-recording of applied sobel-filters for bacterium 1.</center>
         
+        
+    <h2 id="Segmentation">Segmentation Methodology</h2>
+    <hr style="margin-left: auto; margin-right: auto; width: 100%; color: #f2f2f2" />
+
     <h3><code>thresh</code>: threshold </h3>
     <p> A threshold was set manually determining a quantitative cut-off point for the divided  vs. undivided state. Biologically, we know that the bacteria drift from each other as soon as separation occurs, so we are looking for a threshold that will accurately capture that moment. Watching divisions frame-by-frame, we noticed the frame rate introduced a minor inconsistency during each division, since it most likely misses the instantaneous moment of actual division, and captures the division at different stages each round. This introduces the researcher's choice in deciding what actually qualifies as division. A threshold of 0.0045 was chosen after observing sobel mapping value behaviors around division frames. </p>
    
@@ -164,8 +162,9 @@
 <!--how to load from github-->
 <!--      <p><img src="https://gchure.github.io/assets/img/mscl.gif" style="width: 20%" /></p>-->
         
-        <hr style="margin-left: auto; margin-right: auto; width: 60%; color: #f2f2f2" />
         <h2 id="Segmentation">Segmentation Corrections</h2>
+        <hr style="margin-left: auto; margin-right: auto; width: 100%; color: #f2f2f2" />
+
         <p><strong> After arriving at our binary image, we make the assumption that our bacteria is the second largest element in the array (the first being the background... the errors arising from this assumption are dealt with below). The pixels are then counted for each frame and the areas stored in a csv file. However, before doing so, we noticed when watching the divisions frame-by-frame, there were some segmentation errors. We discuss here how we treated the data: </strong> </p>
         <h3> <code>max_growth</code>: maximum growth rate between frames</h3>
         <p>A variable max_growth was defined to set a limitation on how much the bacteria could grow between frames (within one minute). When the edge-detection wasn't able to separate neighboring bacteria from the one of interest, it resulted in false data point spikes. This was a significant issue with the bacterium 2. We set this value manually to 0.025, which means a 2.5% growth rate per minute. Note that for all divisions, we observed with our human eyes no growth surpassed this rate within one frame—we are not eliminating frames to smooth plots, but rather to deal with the errors when the machine counts the areas.</p>
@@ -179,12 +178,10 @@
 
         
         <!--      GROWTH PLOTS-->
-        <hr style="margin-left: auto; margin-right: auto; width: 60%; color: #f2f2f2" />
-        <h2 id="Segmentation">Results</h2>
-        <p> Colors denote alternating growth cycles. </p>
+        <h2 id="Results">Results</h2>
         <img class="page-image" src="bacterium_1_growth_cycles.svg">
         <div>
-            <center>Figure 3a: Growth cycles for first bacterium studied shown in alternating colors.</center>
+            <center>Figure 3a: Growth cycles for first bacterium. </center><center>Colors denote alternating growth cycles. </center>
     <img class="page-image" src="bacterium_2_growth_cycles_tall.svg", style="width:1400px; height:300px;">
         <center>Figure 3b: The dimensions of the second plot are difficult to render.</center>
         <center>The link below gives a closer look at the segmentation difficulties of bacterium 2.</center>
@@ -194,21 +191,34 @@
 
         
         
-    <hr style="margin-left: auto; margin-right: auto; width: 60%; color: #f2f2f2" />
     <h2 id="summary">Modeling</h2>
+    <hr style="margin-left: auto; margin-right: auto; width: 100%; color: #f2f2f2" />
+
 
         <img class="page-image" src="eqn_models_2.jpg">
         <img class="page-image" src="b1_k*.png" style="width:120%">
         <img class="page-image" src="b2_k*.png" style="width:90%">
             
             
-    <hr style="margin-left: auto; margin-right: auto; width: 60%; color: #f2f2f2" />
     <h2 id="summary">Further Analyses</h2>
-        <img class="page-image" src="ecdf_interdivision.png" style="width:300%">
-        <img class="page-image" src="minmax.png" style="width:60%">
-        <img class="page-image" src="fractions_b2.png" style="width:60%">
-        <img class="page-image" src="fractions_damp.png" style="width:60%">
+    <hr style="margin-right: auto; width: 100%; color: #f2f2f2" />
 
+    <p>The <code>growth_data()</code> function in <a href=""><code>'modeling.py'</code></a> was used to extract relevant data for the plots below.</p>
+    <h3 id="interdivision times">Interdivision times</h3>
+    <p><strong>A question we might ask is whether or not the duration of growth cycles is speeding up, slowing down, remaining fairly constant, or conforming to some other distribituion. You could imagine the reasons for the cell to divide differently as it ages. The ECDF below show that within our time frame of study, these times could be modeled as normally distributed. </strong></p>
+        <img class="page-image" src="ecdf_interdivision.png" style="width:400% height:400%">
+            <center>Figure 1: Interdivisional times fitted to a normal distribution.</center>
+            <p>Another way to indirectly visualize this is to plot the minimum and maximum areas of each growth cycle on the same plot. Assuming each cycle follows consistent growth laws, the corresponding peaks and troughs suggest that the cell spends a constant time dividing during each division; the ECDF's more clearly reveal how these times might be distributed.  </p>
+        <img class="page-image" src="minmax_pink.png" style="width:65%">
+            <center>Figure 1: Minimum and maximum areas splined with respect to time.</center>
+        <p>As discussed in <a href="https://www.pnas.org/content/111/45/15912">this paper</a>, the caulobacter appear to grow biphasically, meaning a primary growth pattern resulting in constant increments between generations, and then a secondary pattern with constant growth proportional to initial area. From the modeling above, we saw a dependency on initial area within each cycle, and we can see from the minimum and maximum area plot above, that successive generations do indeed have relatively constant growths; in other words, the max. - min. area in each cycle fluctuates around a constant.</p>
+    <h3 id="interdivision times">Fractional Return</h3>
+    <p><strong>Another question we could ask is how we expect the parent cell size in the next cycle to vary with the maximum joint size of both parent and daughter cell from the previous cycle. In other words, how much 'substance' the parent bacterium is willing to depart with. For example, if the division hovers around a fraction of 50/50, it would mean that the parent size ~= daughter size after division, and we would expect numerically the initial size in the next cycle to be half of the final size in the previous cycle.</strong></p>
+    <p>Hovering over individual data points, We can see from the plot below a sort of 'preferential model': the bacterial response is to divide above or below the equilibrium threshold, giving less "stuff" to the daughter cell if it is below its equilibrium size (higher fraction), and more (smaller fraction) when the bacterium cannot sustain its own size. I believe that this is what the "critical capacity" size the paper refers to!</p>
+        <img class="page-image" src="fractions_org.png" style="width:70%">
+            <center>Figure 1: Fractions of minimum area of this cycle / maximum area of last cycle splined with respect to time.</center>
+
+    
             
   </header> <!-- End Header -->
   
@@ -217,36 +227,31 @@
   
 
 <!--<script type="math/tex; mode=display">f(n\,\vert\,N, p) = \frac{N!}{n! (N - n)!}p^n(1 - p)^{N - n},</script>-->
-<!--    <center>Figure 1: Experimental setup. A field of <em>C. Crescentus</em> </center>-->
 <!--<script type="math/tex; mode=display">S = k_b\ln \Omega. \tag{1}</script>-->
-<!--    -->
-<!---->
-<!--  -->
 <!--  <h1 style="color:maroon;">This is a maroon Heading</h1>-->
 
   
   
-<hr style="margin-left: auto; margin-right: auto; width: 60%; color: #f2f2f2" />
 <h2 id="summary">Summary</h2>
+<hr style="margin-left: auto; margin-right: auto; width: 100%; color: #f2f2f2" />
 <p>A short summary of your work goes here. Think “significance statement”. Nisi bushwick seitan et authentic aute, laboris blog sed in wayfarers lyft plaid ut. Id aesthetic venmo, palo santo aliqua photo booth blue bottle. Meditation non copper mug lomo glossier kombucha. Cred laboris meditation poke sriracha street art letterpress food truck master cleanse adipisicing. Hashtag affogato chambray vaporware subway tile, kogi helvetica ea tacos sint brooklyn. Williamsburg waistcoat raclette seitan glossier messenger bag dolore ramps, flannel magna nisi hot chicken elit pariatur kale chips.</p>
 
 
 <!--    LINKS TO CSV's and TIF images -->
-<hr style="margin-left: auto; margin-right: auto; width: 60%; color: #f2f2f2" />
-<hr style="margin-left: auto; margin-right: auto; width: 60%; color: #f2f2f2" />
-
 <h2 id="Data Downloads">Data Downloads</h2>
-<p>The original TIFF file datasets were too massive to be pushed to github, but they are provided in the link below. The csv's containing all relevant area values (tidied data, with segmented areas) are also provided for convenience. Plots can also be downloaded, as well as screen-recorded gifs. </p>
+<hr style="margin-left: auto; margin-right: auto; width: 100%; color: #f2f2f2" />
+<hr style="margin-left: auto; margin-right: auto; width: 100%; color: #f2f2f2" />
+<p>The original TIFF file datasets were too massive to be pushed to github, but they are provided in the link below. The csv's containing all relevant area values (tidied data, segmented areas) are also provided for convenience. Plots can also be downloaded, as well as screen-recorded gifs from the GitHub repo. Formal discussion by the Scherer Lab is also available on their </p>
 
 <p> <a href="https://s3.amazonaws.com/bebi103.caltech.edu/data/iyer_biswas_et_al.zip">original data</a> |
-    <a href="https://github.com/atisor73/caulobacterpkg/tree/master/datasets_csv">csv-roi files</a> | <a href="https://github.com/atisor73/caulobacterpkg">GitHub Repository</a> |
-    <a href="https://www.pnas.org/content/111/45/15912">published works </a>
+    <a href="https://github.com/atisor73/caulobacterpkg/tree/master/datasets_csv">csv-roi files</a> |  <a href="https://www.pnas.org/content/111/45/15912"> article </a> | <a href="https://github.com/atisor73/caulobacterpkg">GitHub Repository</a> 
+   
 </p>
 
 
 
 <h2 id="acknowledgments">Acknowledgments</h2>
-<p>We thank the Scherer lab for collecting this data, the BeBi103 TA's for their time and patience, Griffin Chure for his aesthetic source codes, Gonzalez and Woods for their graphical explanations of structuring elements, and lastly, Justin Bois for making this course possible.</p>
+<p>We thank Iyer-Biswas of the Scherer lab for sharing this data, the BeBi103 TA's for their time and patience, Griffin Chure for his aesthetic source codes, Gonzalez and Woods for their graphical explanations of structuring elements, and lastly, Justin Bois for making this course possible.</p>
 
       <div class="page-footer">
       </div>
