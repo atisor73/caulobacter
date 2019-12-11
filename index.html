@@ -4,6 +4,7 @@
 <style>
     a:link {
         text-decoration: underline;
+        
     }
     a:visited {
         text-decoration: none;
@@ -13,10 +14,20 @@
         text-decoration: underline;
     }
     a:hover {
-        border-bottom: double 0.5px;
+        border-bottom: double 0.25px;
     }
     a:active {
         text-decoration: underline;
+    }
+    .column {
+      float: left;
+      width: 50%;
+      padding: 1px;
+    }
+    .row::after {
+        content: "";
+        clear: both;
+        display: table;
     }
 
 </style>
@@ -35,7 +46,9 @@
   <link href="https://fonts.googleapis.com/css?family=Bellefair|Cormorant+Infant|&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cardo|Source+Code+Pro">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-
+<!--<link rel="icon" href="PATH/TO/favicon.ico" type="image/x-icon">-->
+<!--    <link rel="icon" sizes="196x196" href="IMG_0657.png">-->
+<!--<link rel="apple-touch-icon" type="image/png" href="https://aws1.discourse-cdn.com/sitepoint/optimized/3X/2/5/251fedb1e929595050b23e6f0ce837f0d59d7be1_2_180x180.png">-->
   <script type="text/javascript" async
     src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
@@ -102,7 +115,7 @@
     <div class="page-cover-image">
       <figure>
           <figcaption style="background-color: rgb(0, 0, 0, 0.5);
-          font-weight:bold; text-align: center;">BEBI103 (Fall 2019)</figcaption>
+          font-weight:bold; text-align: center;">BEBI103 Fall 2019</figcaption>
     
       </figure>
 
@@ -182,23 +195,38 @@
         <img class="page-image" src="bacterium_1_growth_cycles.svg">
         <div>
             <center>Figure 3a: Growth cycles for first bacterium. </center><center>Colors denote alternating growth cycles. </center>
-    <img class="page-image" src="bacterium_2_growth_cycles_tall.svg", style="width:1400px; height:300px;">
+<!--    <img class="page-image" src="bacterium_2_growth_cycles_tall.svg", style="width:1400px; height:300px;">-->
+    <img class="resize" src="bacterium_2_growth_cycles_tall.svg">
+
         <center>Figure 3b: The dimensions of the second plot are difficult to render.</center>
         <center>The link below gives a closer look at the segmentation difficulties of bacterium 2.</center>
         
        <p> <center> <a href="bacterium_2_growth_cycles.html"><strong>Bacterium 2 Zoom</strong></a></center></p>
 
 
-        
-        
-    <h2 id="summary">Modeling</h2>
+
+        <!--      MODELING PLOTS-->
+    <h2 id="summary">Modeling Growth: Linear or Exponential?</h2>
     <hr style="margin-left: auto; margin-right: auto; width: 100%; color: #f2f2f2" />
 
-
         <img class="page-image" src="eqn_models_2.jpg">
-        <img class="page-image" src="b1_k*.png" style="width:120%">
+        <img class="page-image" src="b1_k*.png" style="width:130%">
         <img class="page-image" src="b2_k*.png" style="width:90%">
-            
+    <h3>Residuals</h3>
+    <p>The following plots show the linear vs. exponential model's residuals for every growth cycle of bacterium 1. Note that the y-axes are aligned for comparison, and that we are treating each growth event as a categorical variable (this is not a bar graph).
+    <em>Source Code: </em> <code>residuals()</code> function from <a href="modeling.py"><code>modeling.py</code></a></p>
+
+    <div class="column"><img class="page-image" src="lin_resid_b1.png" style="width:380px">
+        <center><a href="lin_resid_b1.html">Figure 1a: </a>Linear residuals bacterium 1</center>
+    </div>
+        
+    <img class="page-image" src="expo_resid_b1.png" style="width:380px">
+           <center><a href="lin_resid_b1.html">Figure 1b: </a>Exponential residuals bacterium 1</center>
+           
+           
+        
+    <p> The residuals do not appear to be normally distributed, meaning either our model is sensitive to initial values, or that the error behaves heteroscedastically. </p>
+
             
     <h2 id="summary">Further Analyses</h2>
     <hr style="margin-right: auto; width: 100%; color: #f2f2f2" />
@@ -206,18 +234,22 @@
     <p>The <code>growth_data()</code> function in <a href=""><code>'modeling.py'</code></a> was used to extract relevant data for the plots below.</p>
     <h3 id="interdivision times">Interdivision times</h3>
     <p><strong>A question we might ask is whether or not the duration of growth cycles is speeding up, slowing down, remaining fairly constant, or conforming to some other distribituion. You could imagine the reasons for the cell to divide differently as it ages. The ECDF below show that within our time frame of study, these times could be modeled as normally distributed. </strong></p>
-        <img class="page-image" src="ecdf_interdivision.png" style="width:400% height:400%">
+<!--        <img class="page-image" src="interdivision_ecdf.png" style="width:1200px; height:250px;">-->
+        <img class="page-image" src="interdivision_ecdf.png" style="width:110%">
+            <center><a href="interdivision_ecdf_2.html">Bacterium 1</a>
+            <a href="interdivision_ecdf_1.html">Bacterium 2</a></center>
+            
             <center>Figure 1: Interdivisional times fitted to a normal distribution.</center>
             <p>Another way to indirectly visualize this is to plot the minimum and maximum areas of each growth cycle on the same plot. Assuming each cycle follows consistent growth laws, the corresponding peaks and troughs suggest that the cell spends a constant time dividing during each division; the ECDF's more clearly reveal how these times might be distributed.  </p>
         <img class="page-image" src="minmax_pink.png" style="width:65%">
-            <center>Figure 1: Minimum and maximum areas splined with respect to time.</center>
+            <center><a href="minmax_pink.html">Figure 1</a>: Minimum and maximum areas splined with respect to time.</center>
         <p>As discussed in <a href="https://www.pnas.org/content/111/45/15912">this paper</a>, the caulobacter appear to grow biphasically, meaning a primary growth pattern resulting in constant increments between generations, and then a secondary pattern with constant growth proportional to initial area. From the modeling above, we saw a dependency on initial area within each cycle, and we can see from the minimum and maximum area plot above, that successive generations do indeed have relatively constant growths; in other words, the max. - min. area in each cycle fluctuates around a constant.</p>
     <h3 id="interdivision times">Fractional Return</h3>
     <p><strong>Another question we could ask is how we expect the parent cell size in the next cycle to vary with the maximum joint size of both parent and daughter cell from the previous cycle. In other words, how much 'substance' the parent bacterium is willing to depart with. For example, if the division hovers around a fraction of 50/50, it would mean that the parent size ~= daughter size after division, and we would expect numerically the initial size in the next cycle to be half of the final size in the previous cycle.</strong></p>
     <p>Hovering over individual data points, We can see from the plot below a sort of 'preferential model': the bacterial response is to divide above or below the equilibrium threshold, giving less "stuff" to the daughter cell if it is below its equilibrium size (higher fraction), and more (smaller fraction) when the bacterium cannot sustain its own size. I believe that this is what the "critical capacity" size the paper refers to!</p>
         <img class="page-image" src="fractions_org.png" style="width:70%">
-            <center>Figure 1: Fractions of minimum area of this cycle / maximum area of last cycle splined with respect to time.</center>
-
+            <center><a href="fraction.html">Figure 1</a>: Fractions of birth size of this cycle / division size of last cycle splined with respect to time.</center>
+    
     
             
   </header> <!-- End Header -->
@@ -251,6 +283,8 @@
 
 
 <h2 id="acknowledgments">Acknowledgments</h2>
+<hr style="margin-left: auto; margin-right: auto; width: 100%; color: #f2f2f2" />
+
 <p>We thank Iyer-Biswas of the Scherer lab for sharing this data, the BeBi103 TA's for their time and patience, Griffin Chure for his aesthetic source codes, Gonzalez and Woods for their graphical explanations of structuring elements, and lastly, Justin Bois for making this course possible.</p>
 
       <div class="page-footer">

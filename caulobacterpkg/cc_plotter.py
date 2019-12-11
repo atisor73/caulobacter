@@ -66,8 +66,65 @@ def plotter_datashade(df, width, bacterium):
 
 
 def ecdf_plotter(data, title, xrange=None):
-    p = bokeh_catplot.ecdf(data=data, cats=None, val="times", 
-                            style='formal', palette=['#8c564b'], 
-                           x_range=xrange, title=title)
+    return bokeh_catplot.ecdf(data=data, 
+                              cats=None, 
+                              val="times", 
+                            style='formal',
+                              #palette=['#F1D4D4']
+                              #palette=['#8c564b'], 
+                           x_range=xrange,
+                              title=title)
 
+
+def plot_biphasic(df_data, bacterium, width):   
+    p = bokeh.plotting.figure(width=int(width*1.5), height=300, 
+        x_axis_label="frames", y_axis_label="values",
+        tooltips=[("initial area", "@{mins}"), ("cycle", "@{frames}"), 
+                 ("final area", "@{maxs}"), ("time", "@{times}")],
+        title=("growth cycles: "+bacterium))
+    p.line(source=df_data, x="frames", y="mins", color="lightblue", line_width=1.5)
+    p.line(source=df_data, x="frames", y="maxs", color="darkblue", line_width=1.5)
+
+    p.circle(source=df_data, x="frames", y="mins", color="lightblue", line_width=1.5)
+    p.circle(source=df_data, x="frames", y="maxs", color="darkblue", line_width=1.5)
+    p.xgrid.minor_grid_line_color = "snow"
+    p.xgrid.grid_line_color = "snow"
+    p.ygrid.grid_line_color = "snow"
+    p.outline_line_color = None
+    p.title.align = "center"
+    p.output_backend = 'svg'
+    p.toolbar.autohide = True
+    x = np.linspace(0, 4*np.pi, 100)
+    y = np.sin(x)
+    
+    legend = bokeh.models.Legend(items=[
+        ("initial area"   , [p.circle(x,y,color="lightblue"), p.line(x,y,color="lightblue",line_width=1.5)]),
+        ("final area" , [p.circle(x,y,color="darkblue"), p.line(x,y,color="darkblue",line_width=1.5)]),
+        #("times" , [p.circle(x,y,color="orange"), p.line(x,y,color="orange",line_width=1.5)]),
+    ], location="center")
+    p.add_layout(legend, 'right')
     return p
+
+
+
+from bokeh.themes.theme import Theme
+from bokeh.io import curdoc
+
+theme = Theme(
+    json={
+    'attrs' : {
+        'Figure' : {
+            'background_fill_color': 'white',
+            'border_fill_color': 'white',
+            'outline_line_color': 'white',
+        },'Grid': {
+            'grid_line_dash': [6, 4],
+            'grid_line_alpha': .3,},
+        'Axis': {
+            'major_label_text_color': 'black',
+            'axis_label_text_color': 'black',
+            'major_tick_line_color': 'black',
+            'minor_tick_line_color': 'black',
+            'axis_line_color': "white"}}})
+# # how i set themes for some of the plots 
+# curdoc().theme = theme

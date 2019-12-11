@@ -121,7 +121,6 @@ def plucking(df, max_growth, frames_away):
 
 
 
-
 def coloring(df, wiggle):
     '''process of coloring different growth cycles,
     returns dataframe with integer cycles in "colored columns"'''

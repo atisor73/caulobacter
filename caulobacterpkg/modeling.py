@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import random 
+import scipy.stats
 
 import bokeh
 import bokeh.palettes
@@ -48,14 +49,86 @@ def growth_data(df):
     
     return data
 
+# used to spline data points
+def splining(df, f, column1, column2):
+    '''not sure but'''
+    smoothing_factor = f * (df[column2]**2).sum()
+    # spline instance, cubic polynomials
+    column1 = df[column1].values
+    column2 = df[column2].values
+    spl = scipy.interpolate.UnivariateSpline(
+        column1, column2, s=smoothing_factor)
+
+    # spl is now a callable function
+    column1_spline = np.linspace(column1[0], column1[-1], 400)
+    column2_spline = spl(column1_spline)
+    
+    plot = hv.Curve(data=(column1_spline, column2_spline)
+                   ).opts(color="navy", line_width=1.75)
+    return plot
+
+
+
+# LINEAR MODEL
+def lin_theor(t, a_0, k):
+    '''MLE for linear approximation'''
+    out = a_0 * np.ones_like(t)
+    out = a_0 + t * k
+    return out
+
+def resid_lin(params, t, area):
+    """Residuals. `params` here is all parameters except σ."""
+    return area - lin_theor(*params, t)
+
+def mle_lin(area, t):
+    '''Perform least squares'''
+    res = scipy.optimize.least_squares(
+        resid_lin,
+        np.array([0, 0]),
+        args=(t, area),
+        bounds=([-np.inf, -np.inf], [np.inf, np.inf]),
+    )
+
+    # Compute residual sum of squares from optimal params
+    rss_mle = np.sum(resid_lin(res.x, t, area) ** 2)
+
+    # Compute MLE for sigma
+    sigma_mle = np.sqrt(rss_mle / len(t))
+    return tuple([x for x in res.x] + [sigma_mle])
+
+
+# EXPONENTIAL MODEL
+def exp_theor(t, a_0, k):
+    out = a_0 * np.ones_like(t)
+    out = a_0 * np.exp(t * k)
+    return out
+
+def resid_exp(params, t, area):
+    """Residuals. `params` here is all parameters except σ."""
+    return area - exp_theor(*params, t)
+
+def mle_exp(area, t):
+    
+    res = scipy.optimize.least_squares(
+        resid_exp,
+        np.array([0,0]),
+        args=(t, area),
+        bounds=([-np.inf, -np.inf], [np.inf, np.inf]),
+    )
+
+    # Compute residual sum of squares from optimal params
+    rss_mle = np.sum(resid_exp(res.x, t, area) ** 2)
+
+    # Compute MLE for sigma
+    sigma_mle = np.sqrt(rss_mle / len(t))
+    return tuple([x for x in res.x] + [sigma_mle])
 
 
 
 
 
 
-
-
+# to look at how k changes with time
 def return_ks(df):
     '''returns dataframes filled w k-values'''
     dfs = []
@@ -119,8 +192,6 @@ def return_a0s(df, b_k_MLEs_lin, b_k_MLEs_exp):
                                  "a_0_exponential_estimate":df_cycle["a_0_exponential_estimate"]}))
     return dfs
 
-
-
 def return_a_theoretical(df, b_k_MLEs, b_a0_MLEs, func="exp"):
     '''start generating predictive areas from k* and a*
     returns dataframse of all sizes for each cycle with different k* and a* for each'''
@@ -139,24 +210,3 @@ def return_a_theoretical(df, b_k_MLEs, b_a0_MLEs, func="exp"):
                                  "theoretical_a":theoretical_a}))
     return pd.concat(dfs, ignore_index=True)
 
-
-# ecdf bokeh
-def plotter_bokeh(df, width, bacterium):
-    '''plots frames and areas of bacteria'''
-    x, y = "frame", "areas (μm^2)"
-    color = df["colored"]
-    
-    p = bokeh.plotting.figure(width=width, height=300, 
-        x_axis_label=x, y_axis_label=y,
-        tooltips=[(x, "@{frame}"), (y, "@{areas (μm^2)}"), ("cycle", "@{colored}")],
-        title=f"{bacterium}")
-    
-    # alternates colors for even / odd cycles
-    p.circle(source=df.loc[color % 2 == 0], x=x, y=y, color="darkblue")
-    p.circle(source=df.loc[color % 2 == 1], x=x, y=y, color="lightblue")
-
-    p.xgrid.grid_line_color, p.ygrid.grid_line_color = None, None
-    p.outline_line_color = None
-    p.title.align, p.title.text_font_style = "center", "bold"
-    p.toolbar.autohide = True
-    return p
