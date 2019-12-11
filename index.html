@@ -30,6 +30,7 @@
         display: table;
     }
 
+
 </style>
 
   <title>
@@ -130,6 +131,7 @@
 <h1 id="Caulobacter">Caulobacter Crescentus <ul class="github"></h1>
 <p> <a href="http://github.com/atisor73" target="_blank"><i class="fa fa-github"></i></a></ul> Rosita Fu, Theresa Marlin, Erika Salzman </p>
 
+
 <h2 id="abstract">Abstract</h2>
 <hr style="margin-left: auto; margin-right: auto; width: 100%; color: #f2f2f2" />
 <p><strong> Division of an entire bacterial colony is the canonical example of exponential growth. However, the rate of growth of an individual bacterium is less obvious; complex cellular dynamics within the replication machinery and cytoskeletal reactions can change the density of the cell during division, and there could be multiple positive and negative feedback dependencies on the current size that act to promote or constrict growth. Here, two parent <em>Caulobacter Crescentus</em> cells undergoing division were studied, the data provided by <a href="http://schererlab.uchicago.edu/">Norbert Scherer's Lab</a> @ the University of Chicago. Ultimately, we observe a discernible pattern of exponential growth between divisions. We will discuss the specific image processing techniques used to extract the relevant data from these images, as well as the modeling methods used to reach our conclusion of exponential growth.</strong></p>
@@ -137,7 +139,7 @@
 <h3 id="experimental methods">Experimental Methods</h3>
 <p>The Scherer Lab developed a technique to switch off cell adhesion in <em>C. Crescentus</em>, allowing for low-density visualization that would prevent overcrowding in the field of view. Hundreds of generational divisions were studied with a microfluidic device, and the imaged data was subsequently made available to us via Justin Bois.</p>
 
-<img src="lotsa_cauliflower.png" >
+<img src="_site/_images/lotsa_cauliflower.png" >
 <center>Figure 1: Experimental setup. A field of <em>C. Crescentus</em> </center>
 
 <h2 id="img processing">Image Processing</h2>
@@ -146,17 +148,17 @@
 <!--      MOVIES-->
 <p> <strong>The modules in python's <code>skimage</code> helped us convert our images to a binary file, where pixels were either marked as part of the bacterium or not. To do this, a sobel filter was applied to help us define a threshold to assist us in segmentation. The source code is provided below, as well as a discussion of why we selected particular values and variables to help us in the conversion process.</strong></p>
 
-<center><em>Source Code:</em> <a href="caulobacterpkg/img_processing.py"><code>img_processing.py</code></a>.
-   <a href="caulobacterpkg/img_visualization.py"><code>img_visualization.py</code></a>.</center>
+<center><em>Source Code:</em> <a href="caulobacterpkg/caulobacterpkg/img_processing.py"><code>img_processing.py</code></a>.
+   <a href="caulobacterpkg/caulobacterpkg/img_visualization.py"><code>img_visualization.py</code></a>.</center>
 
-    <img src="bacterium_1_display.gif" style="width:90%">
+    <img src="_site/_images/bacterium_1_display.gif" style="width:90%">
         <center>Figure 2a: Screen-recording of pre-filtered frames of bacterium 1.</center>
         <center>Frame rate: 1 frame/minute, interpixel spacing of 0.052 µm, images acquired at 24∘C</center>
         
     <p> Since noise can cause one pixel to look very different from its neighbors, the <a href="https://en.wikipedia.org/wiki/Marr%E2%80%93Hildreth_algorithm">Marr Hildreth algorithm</a> was used to apply a Sobel filter, utilizing a nice computation technique taking the log of the gaussian, operating under the principle that pixels along an edge share similar values.
     </p>
     
-    <img src="marr_hildreth_1.gif" style="width:90%">
+    <img src="_site/_images/marr_hildreth_1.gif" style="width:90%">
         <center>Figure 2b: Screen-recording of applied sobel-filters for bacterium 1.</center>
         
         
@@ -169,7 +171,7 @@
    <h3><code>selem</code>: structuring element size</h3>
    <p> This structuring element was defined for closing and thresholding purposes. Since we know the daughter cell gets flushed away as soon as it finishes dividing, the transformation of "closing" artificially joins the two bacteria. This is a semi-fix for the inter-frame division problem (we most likely do not observe the moment of instantaneous division). We watched the divisions frame-by-frame, viewing how the binary frames progressed, and we settled on a closing parameter that made sure the initial size of the next growth cycle could be as representative of 'instantaenous' as possible. We chose to make this value the same for both bacterium since it made sense that if both bacteria were both around the same size (i.e., ~2μm^2), and the camera apparatus remained the same, then having the same closing parameter would not introduce too much error. If we were aiming for more precision, with a lot more bacteria of differing sizes, we would scale the structuring element area proportionally with the bacteria's time-averaged size.</p>
     
-    <img src="marr_hildreth_labeled_1.gif" style="width:90%">
+    <img src="_site/_images/marr_hildreth_labeled_1.gif" style="width:90%">
         <center>Figure 2c: Screen-recording after manually thresholding frames of bacterium 1.</center>
         <center>      </center>
 <!--how to load from github-->
@@ -192,16 +194,16 @@
         
         <!--      GROWTH PLOTS-->
         <h2 id="Results">Results</h2>
-        <img class="page-image" src="bacterium_1_growth_cycles.svg">
+        <img class="page-image" src="_site/_plots/bacterium_1_growth_cycles.svg">
         <div>
             <center>Figure 3a: Growth cycles for first bacterium. </center><center>Colors denote alternating growth cycles. </center>
 <!--    <img class="page-image" src="bacterium_2_growth_cycles_tall.svg", style="width:1400px; height:300px;">-->
-    <img class="resize" src="bacterium_2_growth_cycles_tall.svg">
+    <img class="resize" src="_site/_plots/bacterium_2_growth_cycles_tall.svg">
 
         <center>Figure 3b: The dimensions of the second plot are difficult to render.</center>
         <center>The link below gives a closer look at the segmentation difficulties of bacterium 2.</center>
         
-       <p> <center> <a href="bacterium_2_growth_cycles.html"><strong>Bacterium 2 Zoom</strong></a></center></p>
+        <p> <center> <a href="_site/_plots/bacterium_2_growth_cycles.html"><strong>Bacter</strong></a><a href="_site/_images/segmentation_difficulties.html"><strong>i</strong></a><a href="_site/_plots/bacterium_2_growth_cycles.html"><strong>um 2 Zoom</strong></a></center></p>
 
 
 
@@ -209,46 +211,62 @@
     <h2 id="summary">Modeling Growth: Linear or Exponential?</h2>
     <hr style="margin-left: auto; margin-right: auto; width: 100%; color: #f2f2f2" />
 
-        <img class="page-image" src="eqn_models_2.jpg">
-        <img class="page-image" src="b1_k*.png" style="width:130%">
-        <img class="page-image" src="b2_k*.png" style="width:90%">
+        <img class="page-image" src="_site/_images/eqn_models_2.jpg">
+
     <h3>Residuals</h3>
     <p>The following plots show the linear vs. exponential model's residuals for every growth cycle of bacterium 1. Note that the y-axes are aligned for comparison, and that we are treating each growth event as a categorical variable (this is not a bar graph).
-    <em>Source Code: </em> <code>residuals()</code> function from <a href="modeling.py"><code>modeling.py</code></a></p>
+    <em>Source Code: </em> <code>residuals()</code> function from <a href="caulobacterpkg/caulobacterpkg/modeling.py"><code>modeling.py</code></a></p>
 
-    <div class="column"><img class="page-image" src="lin_resid_b1.png" style="width:380px">
+    <div class="column"><img class="page-image" src="_site/_plots/lin_resid_b1.png" style="width:380px">
         <center><a href="lin_resid_b1.html">Figure 1a: </a>Linear residuals bacterium 1</center>
     </div>
         
-    <img class="page-image" src="expo_resid_b1.png" style="width:380px">
-           <center><a href="lin_resid_b1.html">Figure 1b: </a>Exponential residuals bacterium 1</center>
-           
-           
-        
+    <img class="page-image" src="_site/_plots/expo_resid_b1.png" style="width:380px">
+           <center><a href="expo_resid_b1.html">Figure 1b: </a>Exponential residuals bacterium 1</center>
     <p> The residuals do not appear to be normally distributed, meaning either our model is sensitive to initial values, or that the error behaves heteroscedastically. </p>
 
+            
+            
+            
+            
+            
+        <img class="page-image" src="_site/_plots/b1_k*.png" style="width:130%">
+        <img class="page-image" src="_site/_plots/b2_k*.png" style="width:90%">
+            
+            
+            
+            
+            
+            
+            
+            
             
     <h2 id="summary">Further Analyses</h2>
     <hr style="margin-right: auto; width: 100%; color: #f2f2f2" />
 
-    <p>The <code>growth_data()</code> function in <a href=""><code>'modeling.py'</code></a> was used to extract relevant data for the plots below.</p>
+    <p>The <code>growth_data()</code> function in <a href="caulobacterpkg/caulobacterpkg/modeling.py"><code>'modeling.py'</code></a> was used to extract relevant data for the plots below.</p>
     <h3 id="interdivision times">Interdivision times</h3>
     <p><strong>A question we might ask is whether or not the duration of growth cycles is speeding up, slowing down, remaining fairly constant, or conforming to some other distribituion. You could imagine the reasons for the cell to divide differently as it ages. The ECDF below show that within our time frame of study, these times could be modeled as normally distributed. </strong></p>
-<!--        <img class="page-image" src="interdivision_ecdf.png" style="width:1200px; height:250px;">-->
-        <img class="page-image" src="interdivision_ecdf.png" style="width:110%">
-            <center><a href="interdivision_ecdf_2.html">Bacterium 1</a>
-            <a href="interdivision_ecdf_1.html">Bacterium 2</a></center>
+
+<!--        <img class="page-image" src="interdivision_ecdf.png" style="width:110%">-->
+    <div class="column">
+        <img class="page-image" src="_site/_plots/interdivision_ecdf_1.svg" style="width:380px">
+    </div>
+        <img class="page-image" src="_site/_plots/interdivision_ecdf_2.svg" style="width:380px">
+<p></p>
+            <center><a href="_site/_plots/interdivision_ecdf_1.html">Bacterium 1</a> |
+            <a href="_site/_plots/interdivision_ecdf_2.html">Bacterium 2</a></center>
             
             <center>Figure 1: Interdivisional times fitted to a normal distribution.</center>
             <p>Another way to indirectly visualize this is to plot the minimum and maximum areas of each growth cycle on the same plot. Assuming each cycle follows consistent growth laws, the corresponding peaks and troughs suggest that the cell spends a constant time dividing during each division; the ECDF's more clearly reveal how these times might be distributed.  </p>
-        <img class="page-image" src="minmax_pink.png" style="width:65%">
-            <center><a href="minmax_pink.html">Figure 1</a>: Minimum and maximum areas splined with respect to time.</center>
+        <img class="page-image" src="_site/_plots/minmax_areas.png" style="width:65%">
+            <center><a href="_site/_plots/minmax_areas.html">Figure 1</a>: Minimum and maximum areas splined with respect to time.</center>
         <p>As discussed in <a href="https://www.pnas.org/content/111/45/15912">this paper</a>, the caulobacter appear to grow biphasically, meaning a primary growth pattern resulting in constant increments between generations, and then a secondary pattern with constant growth proportional to initial area. From the modeling above, we saw a dependency on initial area within each cycle, and we can see from the minimum and maximum area plot above, that successive generations do indeed have relatively constant growths; in other words, the max. - min. area in each cycle fluctuates around a constant.</p>
     <h3 id="interdivision times">Fractional Return</h3>
     <p><strong>Another question we could ask is how we expect the parent cell size in the next cycle to vary with the maximum joint size of both parent and daughter cell from the previous cycle. In other words, how much 'substance' the parent bacterium is willing to depart with. For example, if the division hovers around a fraction of 50/50, it would mean that the parent size ~= daughter size after division, and we would expect numerically the initial size in the next cycle to be half of the final size in the previous cycle.</strong></p>
     <p>Hovering over individual data points, We can see from the plot below a sort of 'preferential model': the bacterial response is to divide above or below the equilibrium threshold, giving less "stuff" to the daughter cell if it is below its equilibrium size (higher fraction), and more (smaller fraction) when the bacterium cannot sustain its own size. I believe that this is what the "critical capacity" size the paper refers to!</p>
-        <img class="page-image" src="fractions_org.png" style="width:70%">
-            <center><a href="fraction.html">Figure 1</a>: Fractions of birth size of this cycle / division size of last cycle splined with respect to time.</center>
+        <img class="page-image" src="_site/_plots/fractions_org.png" style="width:70%">
+            <center><a href="_site/_plots/fraction.html">Figure 1</a>: Fractions of birth size of this cycle / division size of last cycle splined with respect to time.</center>
     
     
             
@@ -273,7 +291,7 @@
 <h2 id="Data Downloads">Data Downloads</h2>
 <hr style="margin-left: auto; margin-right: auto; width: 100%; color: #f2f2f2" />
 <hr style="margin-left: auto; margin-right: auto; width: 100%; color: #f2f2f2" />
-<p>The original TIFF file datasets were too massive to be pushed to github, but they are provided in the link below. The csv's containing all relevant area values (tidied data, segmented areas) are also provided for convenience. Plots can also be downloaded, as well as screen-recorded gifs from the GitHub repo. Formal discussion by the Scherer Lab is also available on their </p>
+<p>The original TIFF file datasets were too massive to be pushed to github, but they are provided in the link below. The csv's containing all relevant area values (tidied data, segmented areas) are also provided for convenience. All figures, including plots and screen-recorded gifs can be downloaded (numbered correspondingly) from the GitHub repo linked below. Formal publication and further discussion by the Scherer Lab is also available in their article.  </p>
 
 <p> <a href="https://s3.amazonaws.com/bebi103.caltech.edu/data/iyer_biswas_et_al.zip">original data</a> |
     <a href="https://github.com/atisor73/caulobacterpkg/tree/master/datasets_csv">csv-roi files</a> |  <a href="https://www.pnas.org/content/111/45/15912"> article </a> | <a href="https://github.com/atisor73/caulobacterpkg">GitHub Repository</a> 
