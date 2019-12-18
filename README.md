@@ -1,5 +1,5 @@
 # Caulobacter Crescentus 
-This repository is a home for our caulobacter data, code, figures, and analysis for BeBi103 Fall 2019 @Caltech. The website exists [here](atisor.github.io/CCTV). The team consists of Rosita Fu, Theresa Marlin, and Erika Salzman.
+This repository is a home for our caulobacter data, code, figures, and analysis for BeBi103 Fall 2019 @Caltech. The website exists [here](https://atisor73.github.io/CCTV/). The team consists of Rosita Fu, Theresa Marlin, and Erika Salzman.
 
 #### `datasets_csv`
 This directory holds csv files of our tidied dataframes containing segmented areas along with separate dataframes containing their ROI's for each bacterium.
